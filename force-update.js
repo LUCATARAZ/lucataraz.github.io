@@ -1,93 +1,44 @@
-// GitHub Pages Mobile Cache Buster v2
-console.log('🚀 GitHub Pages Cache System v2 - Loading...');
-
+// GitHub Pages Cache Buster
 (function() {
-    const IS_MOBILE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const IS_GITHUB = window.location.hostname.includes('github.io');
+    // Questo file viene aggiornato ad ogni deploy
+    const GITHUB_BUILD_VERSION = '{{GITHUB_BUILD_ID}}';
+    const DEPLOY_TIME = '{{DEPLOY_TIMESTAMP}}';
     
-    // Check if this is a GitHub Pages build
-    fetch('/version.txt')
-        .then(response => response.text())
-        .then(versionText => {
-            console.log('📄 Version file:', versionText);
-            
-            // Extract BUILD_ID
-            const buildMatch = versionText.match(/BUILD_ID=(\d+)/);
-            const buildId = buildMatch ? buildMatch[1] : 'unknown';
-            
-            // Store build ID
-            const lastBuildId = localStorage.getItem('github_pages_build_id');
-            
-            if (IS_GITHUB && IS_MOBILE) {
-                console.log(`📱 GitHub Pages Mobile - Build: ${buildId}, Last: ${lastBuildId}`);
+    console.log('⚡ GitHub Pages Force Update v2');
+    console.log('🏗️ Build:', GITHUB_BUILD_VERSION);
+    
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const isGitHub = window.location.hostname.includes('github.io');
+    
+    if (isGitHub) {
+        // Controlla il file .build per verificare se è stato aggiornato
+        fetch('/.build')
+            .then(response => response.text())
+            .then(buildInfo => {
+                const lines = buildInfo.split('\n');
+                const buildTimestamp = lines[0];
+                const storedTimestamp = localStorage.getItem('github_build_timestamp');
                 
-                // Force refresh if build changed or no cache params
-                const url = new URL(window.location.href);
-                const params = url.searchParams;
-                
-                if (lastBuildId !== buildId || !params.has('gh_build')) {
-                    console.log('🔄 Build changed or no cache params - forcing refresh');
+                if (storedTimestamp !== buildTimestamp) {
+                    console.log('🔄 Nuova build rilevata! Forzando refresh...');
+                    localStorage.setItem('github_build_timestamp', buildTimestamp);
                     
-                    // Update localStorage
-                    localStorage.setItem('github_pages_build_id', buildId);
-                    localStorage.setItem('last_mobile_refresh', Date.now().toString());
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('gh_build', GITHUB_BUILD_VERSION);
+                    url.searchParams.set('t', Date.now());
+                    url.searchParams.set('force_update', 'true');
                     
-                    // Add cache busting params
-                    params.set('gh_build', buildId);
-                    params.set('t', Date.now());
-                    params.set('mobile', 'force');
-                    params.set('github', 'pages');
-                    
-                    // Clear all caches
-                    if ('caches' in window) {
-                        caches.keys().then(cacheNames => {
-                            cacheNames.forEach(cacheName => {
-                                caches.delete(cacheName);
-                            });
-                        });
+                    if (isMobile) {
+                        url.searchParams.set('mobile', 'force');
                     }
                     
-                    // Force redirect (replace, not push)
                     setTimeout(() => {
                         window.location.replace(url.toString());
                     }, 300);
-                } else {
-                    console.log('✅ Already on latest build');
                 }
-            }
-        })
-        .catch(error => {
-            console.log('⚠️ Cannot read version.txt:', error);
-            // Fallback: add timestamp if mobile
-            if (IS_GITHUB && IS_MOBILE) {
-                const url = new URL(window.location.href);
-                const params = url.searchParams;
-                
-                if (!params.has('t')) {
-                    params.set('t', Date.now());
-                    params.set('mobile_fallback', 'true');
-                    setTimeout(() => {
-                        window.location.replace(url.toString());
-                    }, 100);
-                }
-            }
-        });
-    
-    // Listen for pageshow event (back/forward cache)
-    window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            console.log('🔄 Page restored from bfcache - forcing reload');
-            window.location.reload();
-        }
-    });
-    
-    // Clear service workers if any
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            registrations.forEach(function(registration) {
-                registration.unregister();
-                console.log('🗑️ Unregistered service worker');
+            })
+            .catch(error => {
+                console.log('⚠️ Impossibile verificare build info:', error);
             });
-        });
     }
 })();
