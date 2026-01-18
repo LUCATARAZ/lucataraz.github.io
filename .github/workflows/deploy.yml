@@ -15,27 +15,49 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Generate cache-busting version
+      - name: GENERATE CACHE BUSTING VERSION (CRITICO)
         run: |
-          echo "CACHE_VERSION=$(date +%s)" >> $GITHUB_ENV
-          echo "BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
+          # Crea un timestamp unico per ogni build
+          TIMESTAMP=$(date +%s)
+          BUILD_ID="${{ github.run_id }}-$TIMESTAMP"
           
-      - name: Create version file
-        run: |
-          echo "BUILD_ID=${{ github.run_id }}" > version.txt
-          echo "BUILD_NUMBER=${{ github.run_number }}" >> version.txt
-          echo "CACHE_VERSION=${{ env.CACHE_VERSION }}" >> version.txt
-          echo "DEPLOY_TIME=$(date)" >> version.txt
-          echo "COMMIT=${{ github.sha }}" >> version.txt
+          echo "🔨 GitHub Pages Build: $BUILD_ID"
+          echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
+          
+          # Crea/aggiorna version.txt con timestamp UNIVOCO
+          cat > version.txt << EOF
+          version=$BUILD_ID
+          build=$BUILD_ID
+          timestamp=$TIMESTAMP
+          github_run_id=${{ github.run_id }}
+          github_run_number=${{ github.run_number }}
+          deployed_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          cache_bust=true
+          mobile_force=true
+          EOF
+          
+          # Crea .build file per cache busting
+          echo "$TIMESTAMP" > .build
+          echo "github_build=$BUILD_ID" >> .build
+          
+          # AGGIORNA INDEX.HTML con BUILD_ID UNIVOCO
+          sed -i "s|GITHUB_BUILD_VERSION = '20240119.5'|GITHUB_BUILD_VERSION = '$BUILD_ID'|g" index.html
+          sed -i "s|gh_build', '20240119.5'|gh_build', '$BUILD_ID'|g" index.html
+          
+          # Aggiungi BUILD_ID a force-update.js se esiste
+          if [ -f "force-update.js" ]; then
+            sed -i "s|const GITHUB_BUILD_VERSION = .*|const GITHUB_BUILD_VERSION = '$BUILD_ID';|g" force-update.js
+          fi
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
