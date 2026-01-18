@@ -4,9 +4,63 @@
    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<!-- ⭐ SCRIPT ANTI-CACHE PER MOBILE -->
+<script>
+// NUCLEARE: Forza ricaricamento su dispositivi mobili
+(function() {
+    // Controlla se è un dispositivo mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (!isMobile) return;
+    
+    const now = Date.now();
+    const lastForce = sessionStorage.getItem('mobileForceReload');
+    
+    // Ricarica solo una volta per sessione
+    if (!lastForce) {
+        sessionStorage.setItem('mobileForceReload', now);
+        
+        // Aggiungi parametri all'URL per forzare cache busting
+        const url = new URL(window.location.href);
+        if (!url.searchParams.has('mobile')) {
+            url.searchParams.set('mobile', now);
+            url.searchParams.set('v', now);
+            url.searchParams.set('timestamp', now);
+            
+            // Ridirigi solo se non siamo già con parametri
+            if (window.location.search.length < 5) {
+                window.location.href = url.toString();
+                return; // Esci, la pagina si ricaricherà
+            }
+        }
+    }
+    
+    // Bust cache per CSS/JS esterni
+    document.addEventListener('DOMContentLoaded', function() {
+        const timestamp = Date.now();
+        const elements = document.querySelectorAll('link[rel="stylesheet"], script[src]');
+        
+        elements.forEach(el => {
+            try {
+                const src = el.href || el.src;
+                if (src && !src.includes('cdnjs.cloudflare.com') && !src.includes('fonts.googleapis.com')) {
+                    const url = new URL(src, window.location.origin);
+                    if (!url.searchParams.has('v')) {
+                        url.searchParams.set('v', timestamp);
+                        if (el.href) el.href = url.toString();
+                        if (el.src) el.src = url.toString();
+                    }
+                }
+            } catch(e) {
+                // Ignora errori
+            }
+        });
+    });
+})();
+</script>   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artista Poliglotta | Creatività Multidisciplinare</title>
+
+   <title>Artista Poliglotta | Creatività Multidisciplinare</title>
   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
