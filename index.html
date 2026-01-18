@@ -1,53 +1,42 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <!-- ==================== META CACHE CONTROL - MODIFICATO ==================== -->
+    <!-- ==================== META CACHE CONTROL ==================== -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, s-maxage=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- ==================== FINE MODIFICA ==================== -->
+    <!-- ==================== FINE META ==================== -->
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- ⭐ SCRIPT ANTI-CACHE PER MOBILE - MIGLIORATO -->
+    <!-- SCRIPT ANTI-CACHE MOBILE POTENZIATO -->
     <script>
-    // NUCLEARE: Forza ricaricamento su dispositivi mobili - VERSIONE MIGLIORATA
     (function() {
-        // Controlla se è un dispositivo mobile
         const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        // 🔥 NUOVO: Parametri di versione aggressivi
         const MOBILE_FORCE_VERSION = Date.now();
-        const MOBILE_CACHE_KEY = 'artista_mobile_force_v2';
+        const MOBILE_CACHE_KEY = 'artista_mobile_force_v3';
         
         if (isMobile) {
-            console.log('📱 MOBILE DETECTED - Applying aggressive cache fix v2...');
+            console.log('📱 MOBILE DETECTED - Applying cache fix...');
             
-            // Controlla se dobbiamo forzare il refresh
             const lastForce = localStorage.getItem(MOBILE_CACHE_KEY);
             const currentUrl = new URL(window.location.href);
             const hasForceParams = currentUrl.searchParams.has('mobile_force');
             
-            // Se non abbiamo forzato di recente OPPURE se mancano parametri forza
             if (!lastForce || !hasForceParams) {
                 localStorage.setItem(MOBILE_CACHE_KEY, MOBILE_FORCE_VERSION.toString());
                 
-                // Aggiungi parametri nucleari all'URL
                 currentUrl.searchParams.set('mobile_force', MOBILE_FORCE_VERSION);
                 currentUrl.searchParams.set('v', MOBILE_FORCE_VERSION);
                 currentUrl.searchParams.set('t', MOBILE_FORCE_VERSION);
                 currentUrl.searchParams.set('cache', 'bust');
-                currentUrl.searchParams.set('ts', MOBILE_FORCE_VERSION);
                 
-                // Ricarica solo se l'URL è cambiato
                 if (currentUrl.toString() !== window.location.href) {
-                    console.log('🔄 FORCING MOBILE REFRESH to:', currentUrl.toString());
-                    
-                    // Piccolo delay per permettere al DOM di caricare
+                    console.log('🔄 FORCING MOBILE REFRESH');
                     setTimeout(() => {
                         window.location.replace(currentUrl.toString());
                     }, 500);
@@ -55,7 +44,6 @@
             }
         }
         
-        // Bust cache per CSS/JS esterni - VERSIONE MIGLIORATA
         document.addEventListener('DOMContentLoaded', function() {
             const timestamp = Date.now();
             const elements = document.querySelectorAll('link[rel="stylesheet"], script[src]');
@@ -71,35 +59,20 @@
                             if (el.src) el.src = url.toString();
                         }
                     }
-                } catch(e) {
-                    // Ignora errori
-                }
+                } catch(e) {}
             });
-            
-            // 🔥 NUOVO: Bust cache anche per immagini
-            setTimeout(() => {
-                document.querySelectorAll('img').forEach(img => {
-                    if (img.src && !img.src.includes('data:')) {
-                        const url = new URL(img.src, window.location.origin);
-                        if (!url.searchParams.has('t')) {
-                            url.searchParams.set('t', timestamp);
-                            img.src = url.toString();
-                        }
-                    }
-                });
-            }, 1000);
         });
     })();
     </script>
    
     <title>Artista Poliglotta | Creatività Multidisciplinare</title>
   
-    <!-- 🔥 NUOVO: Aggiungi timestamp alle librerie esterne -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=20240118">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet?v=20240118">
+    <!-- LIBRERIE ESTERNE -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=20240119">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet?v=20240119">
     
     <style>
-        /* ==================== AGGIUNTA: STILI PER PULSANTE CACHE MOBILE ==================== */
+        /* ==================== PULSANTE CACHE MOBILE ==================== */
         .mobile-cache-btn {
             position: fixed;
             bottom: 20px;
@@ -132,14 +105,13 @@
             100% { transform: scale(1); }
         }
         
-        /* Media query per nascondere su desktop */
         @media (min-width: 769px) {
             .mobile-cache-btn {
                 display: none;
             }
         }
         
-        /* ==================== TUTTI GLI ALTRI STILI ORIGINALI ==================== */
+        /* ==================== STILI PRINCIPALI ==================== */
         * {
             margin: 0;
             padding: 0;
@@ -451,7 +423,6 @@
             color: var(--indigo-dark);
         }
         
-        /* MODIFICA 1: Titolo del libro visibile */
         .book-item-title {
             font-size: 1.2rem;
             font-weight: 600;
@@ -639,32 +610,21 @@
             background: var(--indigo-gradient);
         }
         
-        /* Hero Section */
+        /* ==================== HERO SECTION PULITA ==================== */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: var(--indigo-gradient);
             color: white;
             position: relative;
             overflow: hidden;
             margin-top: 70px;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
         
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.1;
-        }
+        /* RIMOSSO: .hero::before - era la vecchia immagine di default */
         
         .hero-content {
             position: relative;
@@ -726,6 +686,7 @@
             position: relative;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
         
         .section-title {
@@ -751,21 +712,6 @@
             left: 50%;
             transform: translateX(-50%);
             border-radius: 2px;
-        }
-        
-        /* Background overlay */
-        .section-bg-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(26, 11, 46, 0.7);
-        }
-        
-        .section-inner {
-            position: relative;
-            z-index: 1;
         }
         
         /* Books Section */
@@ -974,7 +920,6 @@
         .share-twitter { background: #1da1f2; }
         .share-linkedin { background: #0077b5; }
         .share-whatsapp { background: #25d366; }
-        .share-pinterest { background: #bd081c; }
         
         /* Notifications */
         .notification {
@@ -1025,24 +970,6 @@
             padding: 20px;
         }
         
-        /* PDF Preview */
-        .pdf-preview {
-            margin-top: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #e6e1ff;
-        }
-        
-        .pdf-preview a {
-            color: var(--indigo-dark);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-        
         /* Background Preview */
         .bg-preview {
             width: 100px;
@@ -1067,7 +994,7 @@
     </style>
 </head>
 <body>
-    <!-- ==================== AGGIUNTA: PULSANTE CACHE MOBILE ==================== -->
+    <!-- PULSANTE CACHE MOBILE -->
     <button class="mobile-cache-btn" id="mobileCacheBtn" title="Pulisci cache mobile">
         <i class="fas fa-sync-alt"></i>
     </button>
@@ -1189,7 +1116,7 @@
                     <h4>Hero Section</h4>
                     <div class="form-group">
                         <label for="heroBgUrl">URL Immagine</label>
-                        <input type="text" id="heroBgUrl">
+                        <input type="text" id="heroBgUrl" placeholder="Incolla URL immagine qui">
                         <div id="heroBgPreview" class="bg-preview"></div>
                     </div>
                 </div>
@@ -1198,7 +1125,7 @@
                     <h4>Sezione Libri</h4>
                     <div class="form-group">
                         <label for="booksBgUrl">URL Immagine</label>
-                        <input type="text" id="booksBgUrl">
+                        <input type="text" id="booksBgUrl" placeholder="Incolla URL immagine qui">
                         <div id="booksBgPreview" class="bg-preview"></div>
                     </div>
                 </div>
@@ -1306,7 +1233,7 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Section - ORA PULITA -->
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
@@ -1331,14 +1258,13 @@
                 <h2 id="booksTitle">I Miei Libri</h2>
             </div>
             <div class="books-grid" id="booksContainer">
-                <!-- I libri verranno aggiunti dinamicamente qui -->
+                <!-- Libri dinamicamente qui -->
             </div>
         </div>
     </section>   
     
-    <!-- ==================== AGGIUNTA: SCRIPT PER PULSANTE CACHE MOBILE ==================== -->
+    <!-- SCRIPT PULSANTE CACHE MOBILE -->
     <script>
-    // Funzione per il pulsante cache mobile
     document.addEventListener('DOMContentLoaded', function() {
         const mobileCacheBtn = document.getElementById('mobileCacheBtn');
         
@@ -1348,19 +1274,15 @@
             });
         }
         
-        // Controlla se è mobile e mostra pulsante
         const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (isMobile) {
-            if (mobileCacheBtn) {
-                mobileCacheBtn.style.display = 'flex';
-            }
+        if (isMobile && mobileCacheBtn) {
+            mobileCacheBtn.style.display = 'flex';
         }
     });
     
     function clearMobileCache() {
         showNotification('🔄 Pulizia cache mobile in corso...', 'info');
         
-        // 1. Pulisci localStorage (tranne dati importanti)
         const importantKeys = [
             'artistaPoliglotta_user',
             'artistaPoliglotta_logo', 
@@ -1375,10 +1297,8 @@
             }
         });
         
-        // 2. Pulisci sessionStorage
         sessionStorage.clear();
         
-        // 3. Pulisci Cache API se disponibile
         if ('caches' in window) {
             caches.keys().then(cacheNames => {
                 cacheNames.forEach(cacheName => {
@@ -1387,18 +1307,15 @@
             });
         }
         
-        // 4. Forza reload con parametri cache busting
         setTimeout(() => {
             const timestamp = Date.now();
             const newUrl = new URL(window.location.href);
             
-            // Rimuovi vecchi parametri
             newUrl.searchParams.delete('v');
             newUrl.searchParams.delete('t');
             newUrl.searchParams.delete('mobile');
             newUrl.searchParams.delete('cache');
             
-            // Aggiungi nuovi
             newUrl.searchParams.set('mobile_force', timestamp);
             newUrl.searchParams.set('v', timestamp);
             newUrl.searchParams.set('t', timestamp);
@@ -1407,7 +1324,6 @@
             
             showNotification('✅ Cache pulita! Ricaricamento...', 'success');
             
-            // Piccolo delay per mostrare notifica
             setTimeout(() => {
                 window.location.href = newUrl.toString();
             }, 1500);
@@ -1416,20 +1332,18 @@
     </script>
 
     <script>
-        // Configurazione iniziale
         const CONFIG = {
             adminUsername: "GTG",
             adminPassword: "Taraz1973*",
             defaultLogoIcon: "crown",
             defaultLogoText: "Artista Poliglotta",
-            defaultHeroBg: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80",
+            defaultHeroBg: "", // RIMOSSO: non c'è più immagine di default!
             defaultBooksBg: "",
             recoveryEmail: "info@gotogods.com",
-            maxLogoSize: 100, // 100x100 pixels
+            maxLogoSize: 100,
             acceptedLogoFormats: ['.png', '.jpg', '.jpeg', '.svg']
         };
 
-        // Dati di esempio
         let books = [
             {
                 id: 1,
@@ -1463,7 +1377,6 @@
             }
         ];
 
-        // Stato dell'applicazione
         let currentUser = null;
         let editingBookId = null;
         let currentLogoFile = null;
@@ -1472,57 +1385,15 @@
             'globe', 'brush', 'keyboard', 'gem', 'star', 'feather', 'lightbulb'
         ];
 
-        // Inizializzazione
         document.addEventListener('DOMContentLoaded', function() {
             initApp();
             loadFromLocalStorage();
             renderBooks();
             setupIconOptions();
             setupEventListeners();
-            
-            // 🔥 NUOVO: Controllo mobile e applica fix
-            checkAndApplyMobileFix();
         });
-        
-        // 🔥 NUOVO: Funzione per controllo mobile
-        function checkAndApplyMobileFix() {
-            const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                console.log('📱 MOBILE DEVICE DETECTED - Applying fixes...');
-                
-                // Forza bust cache per tutte le risorse
-                const timestamp = Date.now();
-                document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
-                    if (link.href && !link.href.includes('cdnjs.cloudflare.com') && !link.href.includes('fonts.googleapis.com')) {
-                        try {
-                            const url = new URL(link.href);
-                            url.searchParams.set('mobile_v', timestamp);
-                            link.href = url.toString();
-                        } catch(e) {}
-                    }
-                });
-                
-                // Aggiungi timestamp a tutti gli script locali
-                document.querySelectorAll('script[src]').forEach(script => {
-                    if (script.src && !script.src.includes('//')) {
-                        try {
-                            const url = new URL(script.src, window.location.origin);
-                            url.searchParams.set('mobile_v', timestamp);
-                            script.src = url.toString();
-                        } catch(e) {}
-                    }
-                });
-                
-                // Mostra notifica
-                setTimeout(() => {
-                    showNotification('📱 Modalità mobile attiva - Cache ottimizzata', 'info');
-                }, 2000);
-            }
-        }
 
         function initApp() {
-            // Controlla se l'utente è già loggato
             const savedUser = localStorage.getItem('artistaPoliglotta_user');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -1533,29 +1404,24 @@
         }
 
         function loadFromLocalStorage() {
-            // Carica logo
             const savedLogo = localStorage.getItem('artistaPoliglotta_logo');
             if (savedLogo) {
                 const logo = JSON.parse(savedLogo);
                 
                 if (logo.type === 'image' && logo.imageData) {
-                    // Logo è un'immagine caricata
                     document.getElementById('logoIcon').style.display = 'none';
                     document.getElementById('logoImg').style.display = 'block';
                     document.getElementById('logoImg').src = logo.imageData;
                     document.getElementById('logoImg').alt = logo.text;
                     
-                    // Aggiorna anche la preview
                     document.getElementById('logoPreviewIcon').style.display = 'none';
                     document.getElementById('logoPreviewImg').style.display = 'block';
                     document.getElementById('logoPreviewImg').src = logo.imageData;
                 } else {
-                    // Logo è un'icona FontAwesome
                     document.getElementById('logoIcon').style.display = 'block';
                     document.getElementById('logoImg').style.display = 'none';
                     document.getElementById('logoIcon').className = `fas fa-${logo.icon}`;
                     
-                    // Aggiorna anche la preview
                     document.getElementById('logoPreviewIcon').style.display = 'block';
                     document.getElementById('logoPreviewIcon').className = `fas fa-${logo.icon}`;
                     document.getElementById('logoPreviewImg').style.display = 'none';
@@ -1569,7 +1435,6 @@
                     document.getElementById('customIcon').value = logo.customIcon;
                 }
             } else {
-                // Logo predefinito
                 document.getElementById('logoIcon').className = `fas fa-${CONFIG.defaultLogoIcon}`;
                 document.getElementById('logoText').textContent = CONFIG.defaultLogoText;
                 document.getElementById('logoPreviewIcon').className = `fas fa-${CONFIG.defaultLogoIcon}`;
@@ -1578,29 +1443,33 @@
                 document.getElementById('customIcon').value = CONFIG.defaultLogoIcon;
             }
 
-            // Carica sfondi
             const savedBackgrounds = localStorage.getItem('artistaPoliglotta_backgrounds');
             if (savedBackgrounds) {
                 const backgrounds = JSON.parse(savedBackgrounds);
                 if (backgrounds.hero) {
-                    document.querySelector('.hero').style.backgroundImage = `url('${backgrounds.hero}'), var(--indigo-gradient)`;
+                    document.querySelector('.hero').style.backgroundImage = `url('${backgrounds.hero}')`;
                     document.getElementById('heroBgUrl').value = backgrounds.hero;
                     document.getElementById('heroBgPreview').style.backgroundImage = `url('${backgrounds.hero}')`;
+                } else {
+                    // Se non c'è background salvato, usa solo il gradiente
+                    document.querySelector('.hero').style.background = 'var(--indigo-gradient)';
                 }
+                
                 if (backgrounds.books) {
                     document.getElementById('books').style.backgroundImage = `url('${backgrounds.books}')`;
                     document.getElementById('booksBgUrl').value = backgrounds.books;
                     document.getElementById('booksBgPreview').style.backgroundImage = `url('${backgrounds.books}')`;
                 }
+            } else {
+                // Nessun background salvato: usa solo gradiente per hero
+                document.querySelector('.hero').style.background = 'var(--indigo-gradient)';
             }
 
-            // Carica libri
             const savedBooks = localStorage.getItem('artistaPoliglotta_books');
             if (savedBooks) {
                 books = JSON.parse(savedBooks);
             }
 
-            // Carica testi
             const savedTexts = localStorage.getItem('artistaPoliglotta_texts');
             if (savedTexts) {
                 const texts = JSON.parse(savedTexts);
@@ -1612,7 +1481,6 @@
         }
 
         function saveToLocalStorage() {
-            // Salva logo
             const logoIcon = document.getElementById('logoIcon').className.split('fa-')[1] || CONFIG.defaultLogoIcon;
             const logoText = document.getElementById('logoText').textContent;
             const logoImg = document.getElementById('logoImg').src;
@@ -1633,10 +1501,8 @@
             
             localStorage.setItem('artistaPoliglotta_logo', JSON.stringify(logoData));
 
-            // Salva libri
             localStorage.setItem('artistaPoliglotta_books', JSON.stringify(books));
 
-            // Salva testi
             const texts = {
                 'heroTitle': document.getElementById('heroTitle').textContent,
                 'heroDescription': document.getElementById('heroDescription').textContent,
@@ -1660,21 +1526,14 @@
         }
 
         function selectIcon(icon) {
-            // Deseleziona tutte le icone
             document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
-            
-            // Seleziona l'icona cliccata
             event.target.closest('.icon-option').classList.add('selected');
             
-            // Aggiorna preview
             document.getElementById('logoPreviewIcon').className = `fas fa-${icon}`;
             document.getElementById('customIcon').value = icon;
-            
-            // Nascondi eventuale immagine logo e mostra icona
             document.getElementById('logoPreviewIcon').style.display = 'block';
             document.getElementById('logoPreviewImg').style.display = 'none';
             
-            // Reset file upload
             document.getElementById('logoFileInput').value = '';
             document.getElementById('logoFileInfo').style.display = 'none';
             currentLogoFile = null;
@@ -1684,7 +1543,6 @@
             const file = event.target.files[0];
             if (!file) return;
             
-            // Verifica il formato del file
             const fileName = file.name.toLowerCase();
             const isValidFormat = CONFIG.acceptedLogoFormats.some(format => fileName.endsWith(format));
             
@@ -1694,7 +1552,6 @@
                 return;
             }
             
-            // Verifica dimensione del file (max 2MB)
             if (file.size > 2 * 1024 * 1024) {
                 showNotification('File troppo grande. Dimensione massima: 2MB', 'error');
                 event.target.value = '';
@@ -1703,29 +1560,24 @@
             
             currentLogoFile = file;
             
-            // Mostra informazioni sul file
             document.getElementById('logoFileName').textContent = file.name;
             document.getElementById('logoFileSize').textContent = formatFileSize(file.size);
             document.getElementById('logoFileInfo').style.display = 'block';
             
-            // Leggi le dimensioni dell'immagine
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     document.getElementById('logoFileDimensions').textContent = `${img.width}x${img.height} pixel`;
                     
-                    // Verifica se le dimensioni superano il limite
                     if (img.width > CONFIG.maxLogoSize || img.height > CONFIG.maxLogoSize) {
                         showNotification(`Attenzione: l'immagine sarà ridimensionata a ${CONFIG.maxLogoSize}x${CONFIG.maxLogoSize} pixel`, 'info');
                     }
                     
-                    // Mostra anteprima
                     document.getElementById('logoPreviewImg').src = e.target.result;
                     document.getElementById('logoPreviewImg').style.display = 'block';
                     document.getElementById('logoPreviewIcon').style.display = 'none';
                     
-                    // Deseleziona tutte le icone
                     document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
                     document.getElementById('customIcon').value = '';
                 };
@@ -1741,7 +1593,6 @@
         }
 
         function setupEventListeners() {
-            // Settings button
             document.getElementById('settingsBtn').addEventListener('click', () => {
                 document.getElementById('adminModal').style.display = 'flex';
                 if (currentUser && currentUser.loggedIn) {
@@ -1749,12 +1600,10 @@
                 }
             });
 
-            // Close admin modal
             document.getElementById('closeAdminModal').addEventListener('click', () => {
                 document.getElementById('adminModal').style.display = 'none';
             });
 
-            // Close modals on outside click
             window.addEventListener('click', (e) => {
                 if (e.target.id === 'adminModal') {
                     document.getElementById('adminModal').style.display = 'none';
@@ -1767,7 +1616,6 @@
                 }
             });
 
-            // Login form
             document.getElementById('loginForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const username = document.getElementById('username').value;
@@ -1785,7 +1633,6 @@
                 }
             });
 
-            // Logout button
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 currentUser = null;
                 localStorage.removeItem('artistaPoliglotta_user');
@@ -1794,7 +1641,6 @@
                 document.getElementById('adminModal').style.display = 'none';
             });
 
-            // Admin tabs
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabName = tab.getAttribute('data-tab');
@@ -1802,22 +1648,18 @@
                 });
             });
 
-            // Save logo
             document.getElementById('saveLogoBtn').addEventListener('click', () => {
                 const icon = document.getElementById('customIcon').value || CONFIG.defaultLogoIcon;
                 const text = document.getElementById('logoTextInput').value || CONFIG.defaultLogoText;
                 
-                // Se è stato caricato un file, processalo
                 if (currentLogoFile) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const img = new Image();
                         img.onload = function() {
-                            // Crea un canvas per ridimensionare l'immagine se necessario
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d');
                             
-                            // Calcola le nuove dimensioni mantenendo le proporzioni
                             let width = img.width;
                             let height = img.height;
                             
@@ -1831,63 +1673,51 @@
                             canvas.height = height;
                             ctx.drawImage(img, 0, 0, width, height);
                             
-                            // Ottieni l'immagine ridimensionata come data URL
                             const resizedImageData = canvas.toDataURL(currentLogoFile.type);
                             
-                            // Aggiorna logo principale
                             document.getElementById('logoIcon').style.display = 'none';
                             document.getElementById('logoImg').style.display = 'block';
                             document.getElementById('logoImg').src = resizedImageData;
                             document.getElementById('logoText').textContent = text;
                             
-                            // Aggiorna preview
                             document.getElementById('logoPreviewIcon').style.display = 'none';
                             document.getElementById('logoPreviewImg').style.display = 'block';
                             document.getElementById('logoPreviewImg').src = resizedImageData;
                             document.getElementById('logoPreviewText').textContent = text;
                             
-                            // Salva
                             saveToLocalStorage();
                             showNotification('Logo salvato con successo!', 'success');
-                            
-                            // 🔥 NUOVO: Forza refresh mobile dopo salvataggio
-                            forceMobileRefreshAfterSave();
                         };
                         img.src = e.target.result;
                     };
                     reader.readAsDataURL(currentLogoFile);
                 } else {
-                    // Logo è un'icona FontAwesome
                     document.getElementById('logoIcon').style.display = 'block';
                     document.getElementById('logoImg').style.display = 'none';
                     document.getElementById('logoIcon').className = `fas fa-${icon}`;
                     document.getElementById('logoText').textContent = text;
                     
-                    // Aggiorna preview
                     document.getElementById('logoPreviewIcon').style.display = 'block';
                     document.getElementById('logoPreviewIcon').className = `fas fa-${icon}`;
                     document.getElementById('logoPreviewImg').style.display = 'none';
                     document.getElementById('logoPreviewText').textContent = text;
                     
-                    // Salva
                     saveToLocalStorage();
                     showNotification('Logo salvato con successo!', 'success');
-                    
-                    // 🔥 NUOVO: Forza refresh mobile dopo salvataggio
-                    forceMobileRefreshAfterSave();
                 }
             });
 
-            // Save backgrounds
             document.getElementById('saveBgBtn').addEventListener('click', () => {
                 const heroBg = document.getElementById('heroBgUrl').value;
                 const booksBg = document.getElementById('booksBgUrl').value;
                 
                 if (heroBg) {
-                    document.querySelector('.hero').style.backgroundImage = `url('${heroBg}'), var(--indigo-gradient)`;
+                    document.querySelector('.hero').style.backgroundImage = `url('${heroBg}')`;
                     document.getElementById('heroBgPreview').style.backgroundImage = `url('${heroBg}')`;
                 } else {
-                    document.querySelector('.hero').style.backgroundImage = 'var(--indigo-gradient)';
+                    // Se non c'è URL, torna al gradiente puro
+                    document.querySelector('.hero').style.background = 'var(--indigo-gradient)';
+                    document.querySelector('.hero').style.backgroundImage = 'none';
                 }
                 
                 if (booksBg) {
@@ -1898,19 +1728,14 @@
                     document.getElementById('books').style.backgroundColor = 'var(--light-color)';
                 }
                 
-                // Salva nei localStorage
                 localStorage.setItem('artistaPoliglotta_backgrounds', JSON.stringify({
                     hero: heroBg,
                     books: booksBg
                 }));
                 
                 showNotification('Sfondi salvati con successo!', 'success');
-                
-                // 🔥 NUOVO: Forza refresh mobile dopo salvataggio
-                forceMobileRefreshAfterSave();
             });
 
-            // Add book form
             document.getElementById('addBookForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 
@@ -1926,7 +1751,6 @@
                 };
                 
                 if (editingBookId) {
-                    // Modifica libro esistente
                     const index = books.findIndex(b => b.id === editingBookId);
                     if (index !== -1) {
                         books[index] = { ...books[index], ...newBook, id: editingBookId };
@@ -1934,7 +1758,6 @@
                     editingBookId = null;
                     showNotification('Libro modificato con successo!', 'success');
                 } else {
-                    // Aggiungi nuovo libro
                     books.push(newBook);
                     showNotification('Libro aggiunto con successo!', 'success');
                 }
@@ -1943,40 +1766,28 @@
                 renderBooks();
                 renderBooksList();
                 document.getElementById('addBookForm').reset();
-                
-                // 🔥 NUOVO: Forza refresh mobile dopo salvataggio
-                forceMobileRefreshAfterSave();
             });
 
-            // Save all texts
             document.getElementById('saveAllTexts').addEventListener('click', () => {
                 saveToLocalStorage();
                 showNotification('Testi salvati con successo!', 'success');
-                
-                // 🔥 NUOVO: Forza refresh mobile dopo salvataggio
-                forceMobileRefreshAfterSave();
             });
 
-            // Social form
             document.getElementById('socialForm').addEventListener('submit', (e) => {
                 e.preventDefault();
-                // Qui andrebbe implementato il salvataggio dei link social
                 showNotification('Link social salvati!', 'success');
             });
 
-            // Forgot password
             document.getElementById('forgotPassword').addEventListener('click', (e) => {
                 e.preventDefault();
                 document.getElementById('adminModal').style.display = 'none';
                 document.getElementById('passwordModal').style.display = 'flex';
             });
 
-            // Close password modal
             document.getElementById('closePasswordModal').addEventListener('click', () => {
                 document.getElementById('passwordModal').style.display = 'none';
             });
 
-            // Password reset form
             document.getElementById('passwordResetForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('resetEmail').value;
@@ -1985,45 +1796,18 @@
                 document.getElementById('resetEmail').value = '';
             });
 
-            // Close book preview
             document.getElementById('closeBookPreview').addEventListener('click', () => {
                 document.getElementById('bookPreviewModal').style.display = 'none';
             });
         }
-        
-        // 🔥 NUOVA FUNZIONE: Forza refresh su mobile dopo salvataggio
-        function forceMobileRefreshAfterSave() {
-            const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // Crea un timestamp unico
-                const timestamp = Date.now();
-                
-                // Mostra messaggio
-                showNotification('📱 Aggiornamento rilevato! Forzo refresh su mobile...', 'info');
-                
-                // Piccolo delay e poi ricarica con parametri cache busting
-                setTimeout(() => {
-                    const newUrl = new URL(window.location.href);
-                    newUrl.searchParams.set('mobile_update', timestamp);
-                    newUrl.searchParams.set('v', timestamp);
-                    newUrl.searchParams.set('just_saved', 'true');
-                    
-                    // Ricarica la pagina
-                    window.location.href = newUrl.toString();
-                }, 2000);
-            }
-        }
 
         function showAdminPanels() {
-            // Mostra tutte le tab tranne login
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 if (tab.getAttribute('data-tab') !== 'login') {
                     tab.style.display = 'block';
                 }
             });
             
-            // Nascondi login panel e mostra logo panel
             document.getElementById('loginPanel').classList.remove('active');
             document.querySelector('[data-tab="login"]').classList.remove('active');
             
@@ -2032,29 +1816,14 @@
         }
 
         function switchTab(tabName) {
-            // Nascondi tutti i panel
-            document.querySelectorAll('.admin-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
+            document.querySelectorAll('.admin-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
             
-            // Rimuovi active da tutte le tab
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Mostra il panel selezionato
             document.getElementById(`${tabName}Panel`).classList.add('active');
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
             
-            // Se è la tab libri, carica la lista
-            if (tabName === 'books') {
-                renderBooksList();
-            }
-            
-            // Se è la tab testi, carica i campi
-            if (tabName === 'texts') {
-                loadTextsForEditing();
-            }
+            if (tabName === 'books') renderBooksList();
+            if (tabName === 'texts') loadTextsForEditing();
         }
 
         function showLogoutButton() {
@@ -2087,7 +1856,6 @@
                     <div class="book-info">
                         <h3>${book.title}</h3>
                         <p>${book.description}</p>
-                        ${book.synopsis ?  '' : ''}
                         <div class="book-price">€${book.price.toFixed(2)}</div>
                         <button class="buy-button" onclick="buyBook(${book.id})">
                             <i class="fas fa-shopping-cart"></i> Acquista Ora
@@ -2135,7 +1903,6 @@
             
             editingBookId = bookId;
             
-            // Popola il form
             document.getElementById('bookTitle').value = book.title;
             document.getElementById('bookDescription').value = book.description;
             document.getElementById('bookSynopsis').value = book.synopsis || '';
@@ -2144,12 +1911,9 @@
             document.getElementById('bookPrice').value = book.price;
             document.getElementById('bookImage').value = book.image;
             
-            // Scorri fino al form
-            document.getElementById('addBookForm').scrollIntoView({ behavior: 'smooth' });
-            
-            // Cambia testo del pulsante
             document.querySelector('#addBookForm button').textContent = 'Aggiorna Libro';
             
+            document.getElementById('addBookForm').scrollIntoView({ behavior: 'smooth' });
             showNotification('Modifica il libro e salva le modifiche', 'info');
         }
 
@@ -2160,9 +1924,6 @@
                 renderBooks();
                 renderBooksList();
                 showNotification('Libro eliminato', 'success');
-                
-                // 🔥 NUOVO: Forza refresh mobile dopo eliminazione
-                forceMobileRefreshAfterSave();
             }
         }
 
@@ -2173,11 +1934,11 @@
             const container = document.getElementById('bookPreviewContent');
             container.innerHTML = `
                 <h2>${book.title}</h2>
-                <div style="display: flex; gap: 30px; margin: 30px 0;">
-                    <div style="flex: 1;">
-                        <img src="${book.image}" alt="${book.title}" style="width: 100%; border-radius: 10px;">
+                <div style="display: flex; gap: 30px; margin: 30px 0; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <img src="${book.image}" alt="${book.title}" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                     </div>
-                    <div style="flex: 2;">
+                    <div style="flex: 2; min-width: 300px;">
                         <h3>Descrizione</h3>
                         <p>${book.description}</p>
                         
@@ -2230,7 +1991,6 @@
             if (!book) return;
             
             showNotification(`Acquisto di "${book.title}" aggiunto al carrello!`, 'success');
-            // Qui andrebbe integrato un sistema di e-commerce reale
         }
 
         function shareBook(bookId) {
@@ -2283,7 +2043,6 @@
                 `;
                 container.appendChild(div);
                 
-                // Aggiungi event listener per salvataggio in tempo reale
                 document.getElementById(`edit-${text.id}`).addEventListener('input', (e) => {
                     document.getElementById(text.id).textContent = e.target.value;
                 });
@@ -2297,10 +2056,8 @@
             notification.textContent = message;
             container.appendChild(notification);
             
-            // Mostra la notifica
             setTimeout(() => notification.classList.add('show'), 10);
             
-            // Rimuovi dopo 5 secondi
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 500);
