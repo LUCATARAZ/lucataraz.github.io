@@ -1,14 +1,20 @@
 /*
-  Cache-Control: no-cache, no-store, must-revalidate, max-age=0, s-maxage=0
-  Pragma: no-cache
-  Expires: 0
-  X-GitHub-Cache-Control: no-cache
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  X-GitHub-Cache: bypass
+  X-Cache-Control: no-cache
+  X-Content-Type-Options: nosniff
 
-/*.html
-  Cache-Control: no-cache, no-store, must-revalidate
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
 
 /*.js
-  Cache-Control: no-cache, max-age=0
+  Cache-Control: max-age=0, must-revalidate
+
+/*.css  
+  Cache-Control: max-age=0, must-revalidate
 
 /version.txt
+  Cache-Control: no-store
+
+/.build
   Cache-Control: no-store
