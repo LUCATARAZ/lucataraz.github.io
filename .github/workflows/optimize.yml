@@ -1,0 +1,43 @@
+name: Optimize and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Minify HTML
+        uses: crazy-max/ghaction-html-minify@v1
+        with:
+          entrypoint: ./
+          pattern: "**/*.html"
+          keep-closing-slash: true
+
+      - name: Minify CSS
+        uses: actions/minify@v1
+        with:
+          css: true
+          css_path: "./**/*.css"
+
+      - name: Minify JS
+        uses: actions/minify@v1
+        with:
+          js: true
+          js_path: "./**/*.js"
+
+      - name: Optimize Images
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: true
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
